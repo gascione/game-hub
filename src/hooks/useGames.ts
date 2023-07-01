@@ -16,6 +16,7 @@ export interface Game {
   background_image: string;
   //array of objects where each object has a platform property of type Platform
   parent_platforms: { platform: Platform }[];
+  metacritic: number;
 }
 
 //definimos el interface de cmo vamos a recibir la response
