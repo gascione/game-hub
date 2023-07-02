@@ -30,24 +30,32 @@ const useGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   //xa los error messages
   const [error, setError] = useState([]);
+  //gestionar cuando se cargan/Load las tarjetas
+  const [isLoading, setLoading] = useState(false);
 
   //xa mandar los requests
   useEffect(() => {
     const controller = new AbortController();
 
+    //antes de llamar a la API, todo se esta cargando
+    setLoading(true);
     //con el <FetchGamesResponse> sabemos que la response
     //se organiza como la definimos anteriormente
     apiClient
       .get<FetchGamesResponse>("/games", { signal: controller.signal })
-      .then((res) => setGames(res.data.results))
+      .then((res) => {
+        setGames(res.data.results);
+        setLoading(false);
+      })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
+        setLoading(false);
       });
     return () => controller.abort();
   }, []);
 
-  return { games, error };
+  return { games, error, isLoading };
 };
 
 export default useGames;
