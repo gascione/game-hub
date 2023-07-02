@@ -6,7 +6,7 @@ interface Props {
 const GameCardContainer = ({ children }: Props) => {
   return (
     //creamos las cajitas y adentro despues vamos a renderizar las cards que definimos en gamecard, gamecardskeleton
-    <Box width="300px" borderRadius={10} overflow="hidden">
+    <Box borderRadius={10} overflow="hidden">
       {children}
     </Box>
   );
