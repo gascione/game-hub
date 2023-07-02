@@ -1,5 +1,6 @@
 //esta funcion agarra la url original y devuelve otra pero modificada, con la opcion crop xa que sea mas pequeña la imagen
 const getCroppedImageUrl = (url: string) => {
+  if (!url) return "";
   //buscamos la parte que dice media
   //indexOf nos devuelve el index donde empieza lo que buscamos entonces agregamos el valor del lenght de media/, asi podemos agregar en el numero correcto crop
   //como repetimos muchas veces media/, hacemos una variable a parte xa q sea + prolijo
