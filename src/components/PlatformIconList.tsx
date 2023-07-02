@@ -35,7 +35,11 @@ const PlatformIconList = ({ platforms }: Props) => {
       {/* destructuramos platform asi no tenemos que escribir platform.platform */}
       {platforms.map((platform) => (
         // xa renderizar los iconos de manera dinamica, usamos el slug porque siempre es igual y esta en minuscula
-        <Icon as={iconMap[platform.slug]} color="gray.500"></Icon>
+        <Icon
+          key={platform.id}
+          as={iconMap[platform.slug]}
+          color="gray.500"
+        ></Icon>
       ))}
     </HStack>
   );
