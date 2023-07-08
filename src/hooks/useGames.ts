@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { GameQuery } from "../App";
 import APIClient, { FetchResponse } from "../services/api-client";
 import { Platform } from "./usePlatforms";
@@ -16,18 +16,33 @@ export interface Game {
   rating_top: number;
 }
 
+interface PostQuery {
+  pageSize: number;
+}
+
 const useGames = (gameQuery: GameQuery) =>
-  useQuery<FetchResponse<Game>, Error>({
+  useInfiniteQuery<FetchResponse<Game>, Error>({
     queryKey: ["games", gameQuery],
-    queryFn: () =>
+    queryFn: ({ pageParam = 1 }) =>
       apiClient.getAll({
         params: {
           genres: gameQuery.genre?.id,
           parent_platforms: gameQuery.platform?.id,
           ordering: gameQuery.sortOrder,
           search: gameQuery.searchText,
+          page: pageParam,
         },
       }),
+    //xa chequear que pagina debemos monstrar de info
+    getNextPageParam: (lastPage, allPages) => {
+      //allpages tiene la data de todas las paginas
+      //en esta funcion te devuelve la pagina siguiente, es decir si estas en la 1, te devuelve la 2
+      //si estamos en la pagina 1, entonces allPages es un array de 1 solo elemento
+      //con JSON placeholder, si busca una pagina que no existe xq ya no hay mas info, entonces te vuelve un empty array
+      //entonces en algun momento lastPage va a ser un empty array por lo tanto usamos la siguiente expresion
+      //en un caso normal, la api te devuelve la cantidad total de info y asi calculas el numero de paginas y no hacemos esto
+      return lastPage.next ? allPages.length + 1 : undefined;
+    },
   });
 
 export default useGames;
